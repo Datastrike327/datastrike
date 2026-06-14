@@ -22,10 +22,9 @@ export default function OpportunitiesPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const supabase = createClient();
-
   useEffect(() => {
     const load = async () => {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       setUserId(user?.id ?? null);
 
@@ -46,6 +45,7 @@ export default function OpportunitiesPage() {
 
   const toggleSave = async (oppId: string) => {
     if (!userId) return;
+    const supabase = createClient();
     if (saved.has(oppId)) {
       await supabase.from("saved_opportunities").delete().eq("user_id", userId).eq("opportunity_id", oppId);
       setSaved(prev => { const n = new Set(prev); n.delete(oppId); return n; });

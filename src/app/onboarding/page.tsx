@@ -17,7 +17,6 @@ export default function OnboardingPage() {
   const [interests, setInterests] = useState<string[]>([]);
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const supabase = createClient();
 
   const toggleItem = (arr: string[], setArr: (v: string[]) => void, val: string) => {
     setArr(arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val]);
@@ -25,6 +24,7 @@ export default function OnboardingPage() {
 
   const finish = async () => {
     setLoading(true);
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { router.push("/auth/login"); return; }
     await supabase.from("user_profiles").upsert({

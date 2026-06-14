@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import { Menu, BookOpen, Trophy, LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -82,19 +82,15 @@ export function Navbar() {
                 </Button>
               </Link>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="cursor-pointer h-9 w-9">
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
+                <DropdownMenuTrigger className="flex items-center justify-center h-9 w-9 rounded-full bg-primary text-primary-foreground text-xs font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 select-none">
+                  {initials}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard"><User className="w-4 h-4 mr-2" />Мой кабинет</Link>
+                  <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+                    <User className="w-4 h-4 mr-2" />Мой кабинет
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin"><Settings className="w-4 h-4 mr-2" />Админ-панель</Link>
+                  <DropdownMenuItem onClick={() => router.push("/admin")}>
+                    <Settings className="w-4 h-4 mr-2" />Админ-панель
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
@@ -116,10 +112,8 @@ export function Navbar() {
 
           {/* Mobile burger */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="sm">
-                <Menu className="h-5 w-5" />
-              </Button>
+            <SheetTrigger className={cn("md:hidden", buttonVariants({ variant: "ghost", size: "sm" }))}>
+              <Menu className="h-5 w-5" />
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
               <div className="flex flex-col gap-4 mt-8">
@@ -145,8 +139,12 @@ export function Navbar() {
                   </>
                 ) : (
                   <div className="flex flex-col gap-2 pt-4 border-t">
-                    <Button asChild variant="outline"><Link href="/auth/login" onClick={() => setIsOpen(false)}>Войти</Link></Button>
-                    <Button asChild><Link href="/auth/register" onClick={() => setIsOpen(false)}>Регистрация</Link></Button>
+                    <Button asChild variant="outline">
+                      <Link href="/auth/login" onClick={() => setIsOpen(false)}>Войти</Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/auth/register" onClick={() => setIsOpen(false)}>Регистрация</Link>
+                    </Button>
                   </div>
                 )}
               </div>

@@ -51,10 +51,8 @@ export function CoursesAdmin({ initialData }: { initialData: (Course & { lessons
     <div>
       <div className="flex justify-between items-center mb-4">
         <p className="text-muted-foreground text-sm">{items.length} курсов</p>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openCreate}><Plus className="w-4 h-4 mr-2" />Добавить курс</Button>
-          </DialogTrigger>
+        <Button onClick={openCreate}><Plus className="w-4 h-4 mr-2" />Добавить курс</Button>
+      <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader><DialogTitle>{editId ? "Редактировать" : "Добавить"} курс</DialogTitle></DialogHeader>
             <div className="space-y-3 mt-2">

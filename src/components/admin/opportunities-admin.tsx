@@ -20,7 +20,6 @@ export function OpportunitiesAdmin({ initialData }: { initialData: Opportunity[]
   const [editId, setEditId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const supabase = createClient();
 
   const openCreate = () => { setForm(empty); setEditId(null); setOpen(true); };
   const openEdit = (item: Opportunity) => {
@@ -30,6 +29,7 @@ export function OpportunitiesAdmin({ initialData }: { initialData: Opportunity[]
 
   const save = async () => {
     setLoading(true);
+    const supabase = createClient();
     const payload = { ...form, tags: form.tags.split(",").map(t => t.trim()).filter(Boolean), deadline: form.deadline || null };
     if (editId) {
       const { data } = await supabase.from("opportunities").update(payload).eq("id", editId).select().single();
@@ -43,6 +43,7 @@ export function OpportunitiesAdmin({ initialData }: { initialData: Opportunity[]
 
   const remove = async (id: string) => {
     if (!confirm("Удалить возможность?")) return;
+    const supabase = createClient();
     await supabase.from("opportunities").delete().eq("id", id);
     setItems(items.filter(i => i.id !== id));
   };

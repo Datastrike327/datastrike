@@ -20,7 +20,6 @@ export function CoursesAdmin({ initialData }: { initialData: (Course & { lessons
   const [editId, setEditId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const supabase = createClient();
 
   const openCreate = () => { setForm(empty); setEditId(null); setOpen(true); };
   const openEdit = (item: Course) => {
@@ -30,6 +29,7 @@ export function CoursesAdmin({ initialData }: { initialData: (Course & { lessons
 
   const save = async () => {
     setLoading(true);
+    const supabase = createClient();
     const payload = { ...form, tags: form.tags.split(",").map(t => t.trim()).filter(Boolean) };
     if (editId) {
       const { data } = await supabase.from("courses").update(payload).eq("id", editId).select().single();
@@ -43,6 +43,7 @@ export function CoursesAdmin({ initialData }: { initialData: (Course & { lessons
 
   const remove = async (id: string) => {
     if (!confirm("Удалить курс со всеми уроками?")) return;
+    const supabase = createClient();
     await supabase.from("courses").delete().eq("id", id);
     setItems(items.filter(i => i.id !== id));
   };

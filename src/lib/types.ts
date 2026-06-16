@@ -8,6 +8,7 @@ export type Opportunity = {
   requirements: string | null
   tags: string[]
   apply_url: string | null
+  grades: number[] | null
   created_at: string
 }
 

@@ -15,6 +15,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Menu, BookOpen, Trophy, LayoutDashboard, LogOut, Settings, User } from "lucide-react";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
@@ -73,7 +74,8 @@ export function Navbar() {
         </nav>
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <>
               <Link href="/dashboard" className="hidden md:flex">

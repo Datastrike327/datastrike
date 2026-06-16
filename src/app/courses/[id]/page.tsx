@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, CheckCircle, Circle, Play, Lock } from "lucide-react";
+import { ArrowLeft, CheckCircle, Circle, Play, Lock, Trophy } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EnrollButton } from "@/components/courses/enroll-button";
@@ -106,9 +106,11 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
                       </Link>
                     </Button>
                   ) : (
-                    <div className="text-center py-2">
-                      <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                      <p className="font-semibold text-green-600">Курс пройден!</p>
+                    <div className="rounded-lg border-2 border-primary bg-primary/5 p-4 text-center">
+                      <Trophy className="w-10 h-10 text-primary mx-auto mb-2" />
+                      <p className="font-bold text-base mb-1">Поздравляем!</p>
+                      <p className="text-xs text-muted-foreground mb-3">Курс «{course.title}» успешно пройден</p>
+                      <Badge className="text-xs px-3 py-1">Сертификат получен ✓</Badge>
                     </div>
                   )}
                 </>

@@ -14,13 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Menu, BookOpen, Trophy, LayoutDashboard, LogOut, Settings, User } from "lucide-react";
+import { Menu, BookOpen, Trophy, LayoutDashboard, LogOut, Settings, User, Calendar, Map } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
   { href: "/opportunities", label: "Возможности", icon: Trophy },
   { href: "/courses", label: "Курсы", icon: BookOpen },
+  { href: "/calendar", label: "Календарь", icon: Calendar },
+  { href: "/roadmap", label: "Roadmap", icon: Map },
 ];
 
 export function Navbar() {

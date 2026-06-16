@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import type { QuizQuestion } from "@/lib/types";
+import { toast } from "sonner";
 
 type Props = {
   quiz: QuizQuestion[];
@@ -41,6 +42,16 @@ export function LessonQuiz({ quiz, lessonId, courseId, userId, totalLessons, com
       await supabase.from("enrollments")
         .update({ progress: newProgress })
         .eq("user_id", userId).eq("course_id", courseId);
+      if (newProgress === 100) {
+        toast.success("Курс пройден! Получите сертификат 🎓");
+      }
+    }
+
+    const finalScore = quiz.filter((q, i) => answers[i] === q.answer).length;
+    if (finalScore === quiz.length) {
+      toast.success(`Отлично! Все ${quiz.length} ответов верны`);
+    } else {
+      toast.info(`Результат: ${finalScore}/${quiz.length}. Попробуй ещё раз!`);
     }
 
     setLoading(false);

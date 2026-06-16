@@ -21,6 +21,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/opportunities" className="hover:text-foreground transition-colors">Возможности</Link></li>
               <li><Link href="/courses" className="hover:text-foreground transition-colors">Курсы</Link></li>
+              <li><Link href="/calendar" className="hover:text-foreground transition-colors">Календарь дедлайнов</Link></li>
+              <li><Link href="/roadmap" className="hover:text-foreground transition-colors">Мой Roadmap</Link></li>
+              <li><Link href="/leaderboard" className="hover:text-foreground transition-colors">Лидерборд</Link></li>
               <li><Link href="/dashboard" className="hover:text-foreground transition-colors">Личный кабинет</Link></li>
             </ul>
           </div>

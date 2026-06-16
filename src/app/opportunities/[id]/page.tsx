@@ -72,15 +72,21 @@ export default async function OpportunityDetailPage({ params }: { params: Promis
         <div className="space-y-4">
           <Card>
             <CardContent className="pt-5 space-y-4">
-              {opp.deadline && (
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-muted-foreground shrink-0" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">Дедлайн</p>
-                    <p className="font-semibold">{new Date(opp.deadline).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}</p>
+              {opp.deadline && (() => {
+                const daysLeft = Math.ceil((new Date(opp.deadline).getTime() - Date.now()) / 86400000);
+                return (
+                  <div className="flex items-center gap-3">
+                    <Calendar className="w-5 h-5 text-muted-foreground shrink-0" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Дедлайн</p>
+                      <p className="font-semibold">{new Date(opp.deadline).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}</p>
+                      {daysLeft <= 0 && <Badge variant="outline" className="text-xs mt-1">Приём заявок закрыт</Badge>}
+                      {daysLeft > 0 && daysLeft <= 7 && <Badge variant="destructive" className="text-xs mt-1">Срочно — {daysLeft === 1 ? "завтра" : `${daysLeft} дней`}</Badge>}
+                      {daysLeft > 7 && daysLeft <= 30 && <Badge variant="secondary" className="text-xs mt-1">Осталось {daysLeft} дней</Badge>}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-muted-foreground shrink-0" />
                 <div>

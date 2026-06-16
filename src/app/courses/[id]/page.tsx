@@ -8,6 +8,7 @@ import { ArrowLeft, CheckCircle, Circle, Play, Lock, Trophy } from "lucide-react
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EnrollButton } from "@/components/courses/enroll-button";
+import { CertificateConfetti } from "@/components/courses/certificate-confetti";
 
 export default async function CourseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -107,6 +108,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
                     </Button>
                   ) : (
                     <div className="rounded-lg border-2 border-primary bg-primary/5 p-4 text-center">
+                      <CertificateConfetti />
                       <Trophy className="w-10 h-10 text-primary mx-auto mb-2" />
                       <p className="font-bold text-base mb-1">Поздравляем!</p>
                       <p className="text-xs text-muted-foreground mb-3">Курс «{course.title}» успешно пройден</p>

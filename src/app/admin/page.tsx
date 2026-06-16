@@ -13,10 +13,20 @@ export default async function AdminPage() {
   const { data: profile } = await supabase.from("user_profiles").select("is_admin").eq("id", user.id).single();
   if (!profile?.is_admin) redirect("/dashboard");
 
-  const [{ data: opportunities }, { data: courses }, { data: users }] = await Promise.all([
+  const [
+    { data: opportunities },
+    { data: courses },
+    { data: users },
+    { count: enrollmentsCount },
+    { count: completionsCount },
+    { count: savedCount },
+  ] = await Promise.all([
     supabase.from("opportunities").select("*").order("created_at", { ascending: false }),
     supabase.from("courses").select("*, lessons(id)").order("created_at"),
     supabase.from("user_profiles").select("*").order("created_at", { ascending: false }).limit(20),
+    supabase.from("enrollments").select("*", { count: "exact", head: true }),
+    supabase.from("enrollments").select("*", { count: "exact", head: true }).eq("progress", 100),
+    supabase.from("saved_opportunities").select("*", { count: "exact", head: true }),
   ]);
 
   return (
@@ -27,7 +37,7 @@ export default async function AdminPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-muted/50 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold">{opportunities?.length ?? 0}</div>
           <div className="text-sm text-muted-foreground">Возможностей</div>
@@ -39,6 +49,18 @@ export default async function AdminPage() {
         <div className="bg-muted/50 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold">{users?.length ?? 0}</div>
           <div className="text-sm text-muted-foreground">Пользователей</div>
+        </div>
+        <div className="bg-primary/10 rounded-xl p-4 text-center">
+          <div className="text-2xl font-bold text-primary">{enrollmentsCount ?? 0}</div>
+          <div className="text-sm text-muted-foreground">Записей на курсы</div>
+        </div>
+        <div className="bg-primary/10 rounded-xl p-4 text-center">
+          <div className="text-2xl font-bold text-primary">{completionsCount ?? 0}</div>
+          <div className="text-sm text-muted-foreground">Завершили курс</div>
+        </div>
+        <div className="bg-primary/10 rounded-xl p-4 text-center">
+          <div className="text-2xl font-bold text-primary">{savedCount ?? 0}</div>
+          <div className="text-sm text-muted-foreground">Сохранений</div>
         </div>
       </div>
 

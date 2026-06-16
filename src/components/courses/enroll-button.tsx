@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export function EnrollButton({ courseId, userId }: { courseId: string; userId: string | null }) {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ export function EnrollButton({ courseId, userId }: { courseId: string; userId: s
     if (!userId) return;
     setLoading(true);
     await supabase.from("enrollments").upsert({ user_id: userId, course_id: courseId, progress: 0 });
+    toast.success("Вы записаны на курс! Приступайте к первому уроку.");
     router.refresh();
     setLoading(false);
   };

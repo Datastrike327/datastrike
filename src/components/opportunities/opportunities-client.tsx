@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,14 +30,19 @@ export function OpportunitiesClient({
   const [grade, setGrade] = useState<number | null>(null);
 
   const toggleSave = async (oppId: string) => {
-    if (!userId) return;
+    if (!userId) {
+      toast.error("Войдите в аккаунт, чтобы сохранять возможности");
+      return;
+    }
     const supabase = createClient();
     if (saved.has(oppId)) {
       await supabase.from("saved_opportunities").delete().eq("user_id", userId).eq("opportunity_id", oppId);
       setSaved(prev => { const n = new Set(prev); n.delete(oppId); return n; });
+      toast.info("Убрано из сохранённых");
     } else {
       await supabase.from("saved_opportunities").insert({ user_id: userId, opportunity_id: oppId });
       setSaved(prev => new Set(prev).add(oppId));
+      toast.success("Сохранено в личный кабинет");
     }
   };
 
@@ -123,11 +129,14 @@ export function OpportunitiesClient({
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-3">{opp.description}</p>
                 </Link>
                 <div className="flex items-center justify-between mt-auto pt-3 border-t">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
                     <Badge variant="outline" className="text-xs">{opp.format}</Badge>
-                    {opp.deadline && (
-                      <span>до {new Date(opp.deadline).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })}</span>
-                    )}
+                    {opp.deadline && (() => {
+                      const daysLeft = Math.ceil((new Date(opp.deadline).getTime() - Date.now()) / 86400000);
+                      if (daysLeft <= 0) return <Badge variant="outline" className="text-xs">Истёк</Badge>;
+                      if (daysLeft <= 7) return <Badge variant="destructive" className="text-xs">Срочно · {daysLeft} дн.</Badge>;
+                      return <span>до {new Date(opp.deadline).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })}</span>;
+                    })()}
                   </div>
                   <Button size="sm" variant="ghost" asChild>
                     <Link href={`/opportunities/${opp.id}`}>Подробнее →</Link>

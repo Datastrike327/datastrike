@@ -13,11 +13,13 @@ export default async function HomePage() {
     { data: courses },
     { count: oppCount },
     { count: courseCount },
+    { count: userCount },
   ] = await Promise.all([
     supabase.from("opportunities").select("*").order("created_at", { ascending: false }).limit(3),
     supabase.from("courses").select("*").limit(3),
     supabase.from("opportunities").select("*", { count: "exact", head: true }),
     supabase.from("courses").select("*", { count: "exact", head: true }),
+    supabase.from("user_profiles").select("*", { count: "exact", head: true }),
   ]);
 
   return (
@@ -50,7 +52,7 @@ export default async function HomePage() {
           <div className="flex flex-wrap justify-center gap-8 mt-12 text-center">
             <div><div className="text-3xl font-bold text-primary">{oppCount ?? 0}+</div><div className="text-sm text-muted-foreground">возможностей</div></div>
             <div><div className="text-3xl font-bold text-primary">{courseCount ?? 0}</div><div className="text-sm text-muted-foreground">курсов</div></div>
-            <div><div className="text-3xl font-bold text-primary">1000+</div><div className="text-sm text-muted-foreground">учеников</div></div>
+            <div><div className="text-3xl font-bold text-primary">{userCount ?? 0}+</div><div className="text-sm text-muted-foreground">учеников</div></div>
           </div>
         </div>
       </section>
